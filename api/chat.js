@@ -1,13 +1,4 @@
-import express from "express";
-import cors from "cors";
 import OpenAI from "openai";
-import dotenv from "dotenv";
-
-dotenv.config();
-
-const app = express();
-app.use(cors());
-app.use(express.json());
 
 const client = new OpenAI({
   apiKey: process.env.NVIDIA_API_KEY,
@@ -45,7 +36,20 @@ Mention the right forum or authority (e.g., Consumer Forum / District Court / Cy
 
 Keep responses clear and empathetic. The user may be stressed. Support Hindi queries equally well. **Do not include any internal thoughts, reasoning, or "thinking" steps in your output. Go straight to the structured response.** Always end by asking: "Do you want me to explain any of this further, or do you have a follow-up question?"`;
 
-app.post("/api/chat", async (req, res) => {
+export default async function handler(req, res) {
+  // Handle CORS
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
   try {
     const { messages } = req.body;
 
@@ -72,14 +76,4 @@ app.post("/api/chat", async (req, res) => {
     console.error("NVIDIA API error:", error);
     res.status(500).json({ error: "Failed to get response from AI" });
   }
-});
-
-// For local testing
-const PORT = process.env.PORT || 3001;
-if (process.env.NODE_ENV !== 'production') {
-  app.listen(PORT, () => {
-    console.log(`✅ NyayBot backend running locally on http://localhost:${PORT}`);
-  });
 }
-
-export default app;
