@@ -65,8 +65,6 @@ app.post("/api/chat", async (req, res) => {
     });
 
     let reply = response.choices[0].message.content;
-
-    // Filter out <think> tags and the reasoning within them if the model outputs it
     reply = reply.replace(/<think>[\s\S]*?<\/think>/g, "").trim();
 
     res.json({ reply });
@@ -76,11 +74,12 @@ app.post("/api/chat", async (req, res) => {
   }
 });
 
-app.get("/api/health", (req, res) => {
-  res.json({ status: "ok", message: "NyayBot backend is running" });
-});
-
+// For local testing
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`✅ NyayBot backend running on http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`✅ NyayBot backend running locally on http://localhost:${PORT}`);
+  });
+}
+
+export default app;
