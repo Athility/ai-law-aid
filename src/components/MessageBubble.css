@@ -1,0 +1,82 @@
+.bubble-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.bubble-actions {
+  display: flex;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity 0.15s;
+  margin-left: 4px;
+}
+
+.message:hover .bubble-actions {
+  opacity: 1;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  font-family: "DM Sans", sans-serif;
+  font-size: 11px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.action-btn:hover {
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.action-btn svg {
+  width: 13px;
+  height: 13px;
+}
+
+.action-label {
+  white-space: nowrap;
+}
+
+/* Markdown content styles */
+.md-content strong {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.md-content em {
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.md-content .md-hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 12px 0;
+}
+
+.md-content .md-ul,
+.md-content .md-ol-list {
+  padding-left: 20px;
+  margin: 6px 0;
+}
+
+.md-content .md-li,
+.md-content .md-ol {
+  margin: 4px 0;
+  line-height: 1.7;
+}
+
+.md-content br + br {
+  display: block;
+  content: "";
+  margin-top: 4px;
+}

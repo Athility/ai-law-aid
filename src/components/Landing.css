@@ -1,0 +1,90 @@
+.landing {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 40px;
+  text-align: center;
+  gap: 20px;
+  overflow-y: auto;
+}
+
+.landing-badge {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--accent);
+  background: var(--accent-dim);
+  border: 1px solid rgba(201, 168, 76, 0.25);
+  padding: 6px 16px;
+  border-radius: 100px;
+}
+
+.landing-title {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(36px, 5vw, 58px);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--text);
+  letter-spacing: -1px;
+}
+
+.landing-title span {
+  color: var(--accent);
+  font-style: italic;
+}
+
+.landing-sub {
+  font-size: 15px;
+  color: var(--text-muted);
+  max-width: 440px;
+  line-height: 1.7;
+}
+
+.landing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  width: 100%;
+  max-width: 600px;
+  margin-top: 8px;
+}
+
+.landing-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-family: "DM Sans", sans-serif;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.landing-card:hover {
+  border-color: rgba(201, 168, 76, 0.4);
+  background: var(--accent-dim);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.card-icon {
+  font-size: 22px;
+}
+
+@media (max-width: 640px) {
+  .landing-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .landing {
+    padding: 32px 20px;
+  }
+}

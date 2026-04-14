@@ -1,4 +1,11 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useCallback } from "react";
+import Sidebar from "./components/Sidebar";
+import Landing from "./components/Landing";
+import ChatArea from "./components/ChatArea";
+import InputBar from "./components/InputBar";
+import useTheme from "./hooks/useTheme";
+import useChatHistory from "./hooks/useChatHistory";
+import useKeyboardShortcuts from "./hooks/useKeyboardShortcuts";
 import "./App.css";
 
 const EXAMPLE_QUERIES = [
@@ -10,17 +17,66 @@ const EXAMPLE_QUERIES = [
   { icon: "🏗️", label: "Builder not giving possession", text: "My builder is delaying possession of my flat for 2 years beyond the promised date. Can I get compensation?" },
 ];
 
+function generateId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+
 export default function App() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [started, setStarted] = useState(false);
-  const messagesEndRef = useRef(null);
+  const [activeChatId, setActiveChatId] = useState(() => generateId());
   const inputRef = useRef(null);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, loading]);
+  const { theme, toggleTheme } = useTheme();
+  const { history, save, loadById, remove, refresh } = useChatHistory();
+
+  const handleNewChat = useCallback(() => {
+    // Save current chat if it has messages
+    if (messages.length > 0) {
+      save(activeChatId, messages);
+    }
+    setMessages([]);
+    setStarted(false);
+    setInput("");
+    setActiveChatId(generateId());
+    refresh();
+  }, [messages, activeChatId, save, refresh]);
+
+  const handleClearChat = useCallback(() => {
+    setMessages([]);
+    setStarted(false);
+    setInput("");
+  }, []);
+
+  useKeyboardShortcuts({
+    onNewChat: handleNewChat,
+    onClearChat: handleClearChat,
+    inputRef,
+  });
+
+  const handleSelectChat = useCallback((id) => {
+    // Save current first
+    if (messages.length > 0) {
+      save(activeChatId, messages);
+    }
+    const chat = loadById(id);
+    if (chat) {
+      setMessages(chat.messages);
+      setActiveChatId(chat.id);
+      setStarted(true);
+    }
+  }, [messages, activeChatId, save, loadById]);
+
+  const handleDeleteChat = useCallback((id) => {
+    remove(id);
+    if (id === activeChatId) {
+      setMessages([]);
+      setStarted(false);
+      setActiveChatId(generateId());
+    }
+  }, [remove, activeChatId]);
 
   const sendMessage = async (text) => {
     const userText = text || input.trim();
@@ -40,104 +96,44 @@ export default function App() {
         body: JSON.stringify({ messages: newHistory }),
       });
       const data = await res.json();
-      setMessages([...newHistory, { role: "assistant", content: data.reply }]);
+      const updatedMessages = [...newHistory, { role: "assistant", content: data.reply }];
+      setMessages(updatedMessages);
+      // Auto-save after each response
+      save(activeChatId, updatedMessages);
     } catch {
-      setMessages([...newHistory, { role: "assistant", content: "Something went wrong. Please try again." }]);
+      const errorMessages = [...newHistory, { role: "assistant", content: "Something went wrong. Please try again." }];
+      setMessages(errorMessages);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleKey = (e) => {
-    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-  };
-
   return (
     <div className="app">
-      {/* Sidebar */}
-      <aside className="sidebar">
-        <div className="sidebar-logo">
-          <span className="logo-icon">⚖</span>
-          <div>
-            <h1>NyayBot</h1>
-            <p>AI Legal Aid for India</p>
-          </div>
-        </div>
-
-        <div className="sidebar-section">
-          <p className="section-label">Quick examples</p>
-          {EXAMPLE_QUERIES.map((q, i) => (
-            <button key={i} className="example-btn" onClick={() => { setStarted(true); sendMessage(q.text); }}>
-              <span>{q.icon}</span>
-              <span>{q.label}</span>
-            </button>
-          ))}
-        </div>
-
-        <div className="sidebar-footer">
-          <div className="disclaimer-box">
-            <p>⚠ For general information only. Not a substitute for a licensed lawyer.</p>
-          </div>
-          <p className="made-with">Built for Hackathon 2026</p>
-        </div>
-      </aside>
-
-      {/* Main */}
+      <Sidebar
+        theme={theme}
+        onToggleTheme={toggleTheme}
+        history={history}
+        activeChatId={activeChatId}
+        onSelectChat={handleSelectChat}
+        onNewChat={handleNewChat}
+        onDeleteChat={handleDeleteChat}
+        exampleQueries={EXAMPLE_QUERIES}
+        onExampleClick={(text) => sendMessage(text)}
+      />
       <main className="main">
         {!started ? (
-          <div className="landing">
-            <div className="landing-badge">Free · No sign-up · Indian Law</div>
-            <h2 className="landing-title">Understand your<br /><span>legal rights</span><br />in plain language</h2>
-            <p className="landing-sub">Describe your problem in English or Hindi — get instant guidance on Indian laws, your rights, and next steps.</p>
-            <div className="landing-grid">
-              {EXAMPLE_QUERIES.map((q, i) => (
-                <button key={i} className="landing-card" onClick={() => sendMessage(q.text)}>
-                  <span className="card-icon">{q.icon}</span>
-                  <span>{q.label}</span>
-                </button>
-              ))}
-            </div>
-          </div>
+          <Landing exampleQueries={EXAMPLE_QUERIES} onExampleClick={(text) => sendMessage(text)} />
         ) : (
-          <div className="chat-area">
-            {messages.map((m, i) => (
-              <div key={i} className={`message ${m.role}`}>
-                {m.role === "assistant" && <div className="bot-avatar">⚖</div>}
-                <div className="bubble">
-                  {m.content.split("\n").map((line, j) => (
-                    <span key={j}>{line}{j < m.content.split("\n").length - 1 && <br />}</span>
-                  ))}
-                </div>
-                {m.role === "user" && <div className="user-avatar">You</div>}
-              </div>
-            ))}
-            {loading && (
-              <div className="message assistant">
-                <div className="bot-avatar">⚖</div>
-                <div className="bubble typing">
-                  <span></span><span></span><span></span>
-                </div>
-              </div>
-            )}
-            <div ref={messagesEndRef} />
-          </div>
+          <ChatArea messages={messages} loading={loading} />
         )}
-
-        {/* Input */}
-        <div className="input-bar">
-          <textarea
-            ref={inputRef}
-            className="chat-input"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKey}
-            placeholder="Describe your legal problem in English or Hindi..."
-            rows={1}
-          />
-          <button className="send-btn" onClick={() => sendMessage()} disabled={loading || !input.trim()}>
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 21l21-9L2 3v7l15 2-15 2z" /></svg>
-          </button>
-        </div>
+        <InputBar
+          input={input}
+          setInput={setInput}
+          onSend={() => sendMessage()}
+          loading={loading}
+          inputRef={inputRef}
+        />
       </main>
     </div>
   );
