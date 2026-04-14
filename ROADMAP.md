@@ -36,95 +36,89 @@ A phased plan to evolve NyayBot from a hackathon prototype into a **full-scale l
 
 ---
 
-## Phase 2 — Enhanced UX `📋 PLANNED`
+## Phase 2 — Enhanced UX `✅ COMPLETE`
 
 > **Goal:** Make the app more usable and polished for real-world users.
->
-> **Timeline:** 2–4 weeks post-hackathon
 
-| Status | Feature | Details | Priority |
-|--------|---------|---------|----------|
-| 📋 | **Dark / Light Mode** | System-aware theme toggle with smooth transitions | 🔴 High |
-| 📋 | **Chat History** | Persist conversations in `localStorage`, allow revisiting past sessions | 🔴 High |
-| 📋 | **PDF Export** | Download any legal guidance as a formatted PDF document | 🔴 High |
-| 📋 | **Markdown Rendering** | Render bold, lists, and sections properly in chat bubbles | 🟡 Medium |
-| 📋 | **Copy to Clipboard** | One-click copy for any bot response | 🟡 Medium |
-| 📋 | **New Chat Button** | Clear current conversation and start fresh | 🟡 Medium |
-| 📋 | **Loading Skeleton** | Better loading states beyond the typing indicator | 🟢 Low |
-| 📋 | **Keyboard Shortcuts** | `Ctrl+N` new chat, `Ctrl+L` clear, `Ctrl+K` search history | 🟢 Low |
+| Status | Feature | Details |
+|--------|---------|---------|
+| ✅ | **Dark / Light Mode** | System-aware theme toggle with smooth transitions |
+| ✅ | **Chat History** | Persist conversations in `localStorage`, revisit past sessions |
+| ✅ | **PDF Export** | Download any legal guidance as a formatted PDF (html2pdf.js) |
+| ✅ | **Markdown Rendering** | Render bold, lists, and sections properly |
+| ✅ | **Copy to Clipboard** | One-click copy for any bot response |
+| ✅ | **New Chat Button** | Clear current conversation and start fresh |
+| ✅ | **Loading Skeleton** | Shimmer states replacing typing indicators |
+| ✅ | **Keyboard Shortcuts** | `Ctrl+N` new chat, `Ctrl+L` clear, `/` focus input |
 
 ---
 
-## Phase 3 — Language & Accessibility `📋 PLANNED`
+## Phase 3 — Voice & Accessibility `📋 PLANNED`
 
-> **Goal:** Make NyayBot accessible to all of India — not just English speakers.
->
-> **Timeline:** 1–2 months
+> **Goal:** Break language barriers and enable hands-free interaction.
+> **Priority Focus:** 🔴 Voice Input & Regional UI
 
 | Status | Feature | Details | Priority |
 |--------|---------|---------|----------|
-| 📋 | **Hindi UI** | Full interface translated into Hindi with toggle switch | 🔴 High |
-| 📋 | **Marathi UI** | Interface in Marathi for Maharashtra users | 🟡 Medium |
-| 📋 | **Voice Input** | Speech-to-text using Web Speech API for hands-free queries | 🔴 High |
-| 📋 | **Text-to-Speech** | Read out legal guidance aloud for low-literacy users | 🟡 Medium |
-| 📋 | **Regional Languages** | Tamil, Telugu, Bengali, Gujarati, Kannada UI support | 🟢 Low |
+| 📋 | **Voice Input** | Speech-to-text supporting English and **Regional Languages** (Hindi, Marathi, etc.) | 🔴 High |
+| 📋 | **Hindi & Marathi UI** | Full interface translated for regional comfort | 🔴 High |
+| 📋 | **Text-to-Speech** | AI speaks responses for low-literacy accessibility | 🟡 Medium |
 | 📋 | **Font Size Controls** | Accessibility zoom for elderly users | 🟡 Medium |
 | 📋 | **Screen Reader Support** | Full ARIA labels and semantic HTML | 🟡 Medium |
 
 ---
 
-## Phase 4 — Intelligence Layer `📋 PLANNED`
+## Phase 4 — Deep Intelligence `📋 PLANNED`
 
-> **Goal:** Make the AI smarter, more accurate, and more contextually aware.
->
-> **Timeline:** 2–3 months
+> **Goal:** Granular control over analysis depth and precision.
+> **Priority Focus:** 🔴 3-Mode Analysis Architecture
 
 | Status | Feature | Details | Priority |
 |--------|---------|---------|----------|
-| 📋 | **RAG Pipeline** | Retrieve actual legal text from Indian Kanoon / bare acts before answering | 🔴 High |
-| 📋 | **Case Law References** | Cite relevant Supreme Court / High Court judgments | 🔴 High |
-| 📋 | **State-Specific Laws** | Ask for user's state to provide jurisdiction-specific guidance | 🔴 High |
-| 📋 | **Legal Document Templates** | Generate FIR drafts, consumer complaints, legal notices | 🟡 Medium |
-| 📋 | **Follow-Up Suggestions** | AI suggests next questions based on the user's situation | 🟡 Medium |
-| 📋 | **Confidence Scoring** | Show how confident the AI is in its legal guidance | 🟢 Low |
-| 📋 | **Multi-Model Support** | Fallback between Claude, GPT, Gemini for reliability | 🟢 Low |
+| 📋 | **3 Analysis Modes** | **Basic:** Fastest response, no legal db usage.<br>**Advanced:** Medium fast, minimal db cross-check.<br>**Deep Analysis:** Peak cross-checking with full legal database. | 🔴 High |
+| 📋 | **RAG Pipeline** | Real-time retrieval from Indian Kanoon / Bare Acts | 🔴 High |
+| 📋 | **Case Law Refs** | Citation of Supreme Court / High Court judgments | 🔴 High |
+| 📋 | **State-Specific Laws** | Jurisdiction-aware guidance (e.g., State Acts) | 🔴 High |
+| 📋 | **Legal Templates** | Generate drafts for FIRs, legal notices, etc. | 🟡 Medium |
 
 ---
 
-## Phase 5 — Community & Distribution `💭 UNDER CONSIDERATION`
+## Phase 5 — Visual & Document Intelligence `📋 PLANNED`
 
-> **Goal:** Reach users where they are — beyond just a web app.
->
-> **Timeline:** 3–6 months
+> **Goal:** Understanding physical evidence and documents.
+> **Priority Focus:** 🔴 Multimodal Evidence Processing
 
 | Status | Feature | Details | Priority |
 |--------|---------|---------|----------|
-| 💭 | **WhatsApp Bot** | Serve legal guidance via WhatsApp (Twilio / Meta API) | 🔴 High |
-| 💭 | **Telegram Bot** | Alternative messaging platform integration | 🟡 Medium |
-| 💭 | **PWA Support** | Installable as a Progressive Web App on mobile | 🔴 High |
-| 💭 | **Nearby Legal Aid Centers** | Map-based finder for DLSA offices and legal aid clinics | 🟡 Medium |
-| 💭 | **Lawyer Connect** | Connect users to pro-bono lawyers for complex cases | 🟡 Medium |
-| 💭 | **Community Forum** | User Q&A where resolved cases help others | 🟢 Low |
-| 💭 | **NGO Dashboard** | Admin panel for legal aid organizations to track impact | 🟢 Low |
+| 📋 | **Image Input** | Upload photos of disputes, handwritten notes, or chat screenshots. AI analyzes them in context of the chat. | 🔴 High |
+| 📋 | **Document Reader** | Support for PDF and .docx uploads. AI extracts text and analyzes images within these documents. | 🔴 High |
+| 📋 | **Evidence Summary** | Automated extraction of key facts from visual/doc evidence. | 🟡 Medium |
 
 ---
 
-## Phase 6 — Scale & Sustainability `💭 UNDER CONSIDERATION`
+## Phase 6 — Reach & Community `📋 PLANNED`
 
-> **Goal:** Make NyayBot sustainable and production-grade.
->
-> **Timeline:** 6–12 months
+> **Goal:** Expand distribution beyond the web app.
 
 | Status | Feature | Details | Priority |
 |--------|---------|---------|----------|
-| 💭 | **User Authentication** | Optional accounts for saved history and personalized guidance | 🟡 Medium |
-| 💭 | **Analytics Dashboard** | Track most common legal queries, regional trends, impact metrics | 🔴 High |
-| 💭 | **Rate Limiting & Abuse Prevention** | Protect the API from spam and misuse | 🔴 High |
-| 💭 | **Database Integration** | PostgreSQL/MongoDB for persistent storage (opt-in by user) | 🟡 Medium |
-| 💭 | **Admin Panel** | Manage system prompts, monitor usage, review AI quality | 🟡 Medium |
-| 💭 | **API for Partners** | Public API for NGOs, legal tech companies, government portals | 🟢 Low |
-| 💭 | **Offline Mode** | Cached common legal FAQs available without internet | 🟢 Low |
-| 💭 | **Open Source Legal Dataset** | Curated Indian law knowledge base as a public resource | 💭 Exploring |
+| 📋 | **WhatsApp Bot** | Serve legal guidance via WhatsApp (Twilio/Meta API) | 🔴 High |
+| 📋 | **Telegram Bot** | Alternative messaging platform integration | 🟡 Medium |
+| 📋 | **PWA Support** | Installable mobile experience | 🔴 High |
+| 📋 | **Nearby Legal Aid** | Map-based finder for Law offices and DLSA centers | 🟡 Medium |
+| 📋 | **Lawyer Connect** | Connect users to verified pro-bono lawyers | 🟡 Medium |
+
+---
+
+## Phase 7 — Scale & Sustainability `💭 UNDER CONSIDERATION`
+
+| Status | Feature | Details | Priority |
+|--------|---------|---------|----------|
+| 💭 | **User Authentication** | Cloud-synced history and verified identity | 🟡 Medium |
+| 💭 | **Analytics Dashboard** | Identify common legal trends and impact metrics | 🔴 High |
+| 💭 | **Rate Limiting** | Professional API security and abuse prevention | 🔴 High |
+| 💭 | **Database Sync** | Secure PostgreSQL/MongoDB for persistent storage | 🟡 Medium |
+| 💭 | **Admin Panel** | Manage system prompts and AI quality monitoring | 🟡 Medium |
 
 ---
 

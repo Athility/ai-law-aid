@@ -6,6 +6,7 @@ import InputBar from "./components/InputBar";
 import useTheme from "./hooks/useTheme";
 import useChatHistory from "./hooks/useChatHistory";
 import useKeyboardShortcuts from "./hooks/useKeyboardShortcuts";
+import useVoiceInput from "./hooks/useVoiceInput";
 import "./App.css";
 
 const EXAMPLE_QUERIES = [
@@ -31,6 +32,13 @@ export default function App() {
 
   const { theme, toggleTheme } = useTheme();
   const { history, save, loadById, remove, refresh } = useChatHistory();
+
+  // Voice input — append transcribed text to the input field
+  const voice = useVoiceInput(
+    useCallback((transcript) => {
+      setInput((prev) => (prev ? prev + " " : "") + transcript);
+    }, [])
+  );
 
   const handleNewChat = useCallback(() => {
     // Save current chat if it has messages
@@ -133,6 +141,7 @@ export default function App() {
           onSend={() => sendMessage()}
           loading={loading}
           inputRef={inputRef}
+          voice={voice}
         />
       </main>
     </div>
