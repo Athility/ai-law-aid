@@ -1,5 +1,4 @@
 import "./Sidebar.css";
-import ThemeToggle from "./ThemeToggle";
 
 export default function Sidebar({
   theme,
@@ -11,69 +10,96 @@ export default function Sidebar({
   onDeleteChat,
   exampleQueries,
   onExampleClick,
+  user,
+  onLoginClick,
+  onLogout,
+  isOpen,
+  onClose,
 }) {
   return (
-    <aside className="sidebar">
-      <div className="sidebar-header">
-        <div className="sidebar-logo">
-          <span className="logo-icon">⚖</span>
-          <div>
-            <h1>NyayBot</h1>
-            <p>AI Legal Aid for India</p>
-          </div>
-        </div>
-        <ThemeToggle theme={theme} onToggle={onToggleTheme} />
-      </div>
+    <aside className={`sidebar ${isOpen ? "open" : ""}`}>
+      {/* Header logic relocated to global Floating Header */}
 
-      <button className="new-chat-btn" onClick={onNewChat}>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
-        </svg>
-        New Chat
+      <button className="new-chat-btn" onClick={() => { onNewChat(); onClose(); }}>
+        <span className="plus">+</span> New Chat
       </button>
 
-      {history.length > 0 && (
-        <div className="sidebar-section history-section">
-          <p className="section-label">Recent Chats</p>
-          <div className="history-list">
-            {history.map((chat) => (
-              <div
-                key={chat.id}
-                className={`history-item ${chat.id === activeChatId ? "active" : ""}`}
-                onClick={() => onSelectChat(chat.id)}
+      <div className="sidebar-scroll">
+        <div className="section">
+          <h3 className="section-title">RECENT CHATS</h3>
+          <div className="chat-list">
+            {history.length === 0 ? (
+              <p className="empty-state">No history yet</p>
+            ) : (
+              history.map((chat) => (
+                <div key={chat.id} className={`chat-item-wrapper ${chat.id === activeChatId ? "active" : ""}`}>
+                  <button
+                    className="chat-item"
+                    onClick={() => onSelectChat(chat.id)}
+                  >
+                    <span className="chat-icon">💬</span>
+                    <span className="chat-title">{chat.title || "New Chat"}</span>
+                  </button>
+                  <button className="delete-chat" onClick={() => onDeleteChat(chat.id)}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="3 6 5 6 21 6"></polyline>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        <div className="section">
+          <h3 className="section-title">QUICK EXAMPLES</h3>
+          <div className="example-list">
+            {exampleQueries.map((q, i) => (
+              <button
+                key={i}
+                className="example-item"
+                onClick={() => { onExampleClick(q.text); onClose(); }}
               >
-                <svg className="history-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                </svg>
-                <span className="history-title">{chat.title}</span>
-                <button
-                  className="history-delete"
-                  onClick={(e) => { e.stopPropagation(); onDeleteChat(chat.id); }}
-                  title="Delete chat"
-                >
-                  ×
-                </button>
-              </div>
+                <span className="example-icon">{q.icon}</span>
+                <span className="example-label">{q.label}</span>
+              </button>
             ))}
           </div>
         </div>
-      )}
-
-      <div className="sidebar-section">
-        <p className="section-label">Quick examples</p>
-        {exampleQueries.map((q, i) => (
-          <button key={i} className="example-btn" onClick={() => onExampleClick(q.text)}>
-            <span>{q.icon}</span>
-            <span>{q.label}</span>
-          </button>
-        ))}
       </div>
 
       <div className="sidebar-footer">
-        <div className="disclaimer-box">
-          <p>⚠ For general information only. Not a substitute for a licensed lawyer.</p>
+        {user ? (
+          <div className="user-profile">
+            {user.picture ? (
+              <img src={user.picture} alt={user.name} className="user-avatar-img" />
+            ) : (
+              <div className="user-avatar">{user.name?.[0] || "U"}</div>
+            )}
+            <div className="user-info">
+              <span className="user-name">{user.name}</span>
+              <button className="logout-btn" onClick={onLogout}>Logout</button>
+            </div>
+          </div>
+        ) : (
+          <button className="login-trigger-btn" onClick={onLoginClick}>
+            <span className="login-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </span>
+            <div className="login-text">
+              <span className="login-title">Sign In / Sync</span>
+              <span className="login-sub">Keep your chats safe</span>
+            </div>
+          </button>
+        )}
+        
+        <div className="footer-links">
+          <span>Built for Hackathon 2026</span>
         </div>
-        <p className="made-with">Built for Hackathon 2026</p>
       </div>
     </aside>
   );

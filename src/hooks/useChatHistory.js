@@ -18,7 +18,7 @@ function persistAll(chats) {
 export default function useChatHistory() {
   const [history, setHistory] = useState(loadAll);
 
-  const save = useCallback((id, messages) => {
+  const save = useCallback((id, messages, anonId) => {
     if (!messages || messages.length === 0) return;
     setHistory((prev) => {
       const firstUserMsg = messages.find((m) => m.role === "user");
@@ -29,10 +29,10 @@ export default function useChatHistory() {
       let updated;
       if (existing) {
         updated = prev.map((c) =>
-          c.id === id ? { ...c, messages, title, updatedAt: Date.now() } : c
+          c.id === id ? { ...c, messages, title, updatedAt: Date.now(), anonId } : c
         );
       } else {
-        updated = [{ id, title, messages, createdAt: Date.now(), updatedAt: Date.now() }, ...prev];
+        updated = [{ id, title, messages, createdAt: Date.now(), updatedAt: Date.now(), anonId }, ...prev];
       }
       updated.sort((a, b) => b.updatedAt - a.updatedAt);
       persistAll(updated);

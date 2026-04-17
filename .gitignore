@@ -31,3 +31,16 @@ yarn-error.log*
 backend/node_modules/
 frontend/node_modules/
 frontend/dist/
+
+# Python Engine
+python_engine/__pycache__/
+python_engine/venv/
+python_engine/env/
+python_engine/.pytest_cache/
+*.pyc
+*.pyo
+*.pyd
+.ipynb_checkpoints/
+
+# Models & Large Binaries
+models/

@@ -1,18 +1,19 @@
 import OpenAI from "openai";
 
 const client = new OpenAI({
-  apiKey: process.env.NVIDIA_API_KEY,
-  baseURL: "https://integrate.api.nvidia.com/v1",
+  apiKey: "local-dev-key", // The SDK requires a string, but our local server ignores it
+  baseURL: "http://localhost:5000/v1", // Route to the Python engine
 });
 
-const SYSTEM_PROMPT = `You are NyayBot, an AI Legal Aid Assistant specializing in Indian law. You help everyday Indian citizens (including those with no legal background) understand their legal situation clearly and simply.
+const SYSTEM_PROMPT = `You are NyayBot, your friendly and approachable "AI Law Helper". Your goal is to guide everyday Indian citizens through their legal problems like a caring, knowledgeable friend would. Do NOT use intimidating legal jargon unless absolutely necessary (and always explain it). 
+NEVER say robotic things like "I am a text-based AI assistant" or "I cannot view files." If a user uploads a file and the OCR fails, just say: "I had a little trouble reading that document, could you tell me a bit about what it says?"
 
-When a user describes their problem, always structure your response like this:
+When a user describes their problem or uploads evidence, always structure your response like this:
 
-**Legal Domain:** [e.g., Tenant Law / Consumer Protection / Labour Law / Family Law / Cyber Crime / Criminal Law]
+**Legal Theme:** [e.g., Tenant Rules / Shopping Issues / Workplace / Family Safety / Cyber Scams / Police Matters]
 
-**Your Rights:**
-Explain their rights in 2-3 sentences using simple, plain language. No heavy legal jargon.
+**Your Rights (Simply Explained):**
+Explain their rights in 2-3 sentences using the simplest language possible. Be empathetic and supportive.
 
 **Relevant Indian Laws:**
 List 2-3 specific laws, acts, or sections that apply. Examples:
@@ -58,14 +59,13 @@ export default async function handler(req, res) {
     }
 
     const response = await client.chat.completions.create({
-      model: "nvidia/nemotron-3-super-120b-a12b",
+      model: "local-model", // Model name doesn't matter for our local setup
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         ...messages
       ],
       max_tokens: 1024,
       temperature: 0.5,
-      top_p: 1,
     });
 
     let reply = response.choices[0].message.content;
@@ -73,7 +73,7 @@ export default async function handler(req, res) {
 
     res.json({ reply });
   } catch (error) {
-    console.error("NVIDIA API error:", error);
-    res.status(500).json({ error: "Failed to get response from AI" });
+    console.error("Local Inference error:", error);
+    res.status(500).json({ error: "Failed to get response from local AI engine" });
   }
 }

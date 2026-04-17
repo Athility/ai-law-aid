@@ -2,15 +2,14 @@
 
 # ⚖ NyayBot
 
-### AI Legal Aid Assistant for India
+### Your Friendly AI Law Helper for India
 
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?logo=react&logoColor=white)](https://react.dev)
 [![Node.js](https://img.shields.io/badge/Node.js-ES_Modules-339933?logo=node.js&logoColor=white)](https://nodejs.org)
-[![Claude AI](https://img.shields.io/badge/Claude_AI-Sonnet_4-CC785C?logo=anthropic&logoColor=white)](https://anthropic.com)
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)](https://python.org)
 [![Vite](https://img.shields.io/badge/Vite-5.4-646CFF?logo=vite&logoColor=white)](https://vitejs.dev)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-A **free, open-source** AI-powered legal aid chatbot that helps Indian citizens understand their legal rights in **plain English and Hindi** — no sign-up, no fees, no jargon.
+NyayBot is your **Friendly AI Law Helper** — a professional, premium legal aid platform designed to help Indian citizens navigate the complexities of Indian Law with empathy and clarity. No jargon, no fees, no barriers.
 
 [Get Started](#-quick-start) · [Features](#-features) · [Architecture](#-architecture) · [Deploy](#-deployment) · [Contribute](#-contributing)
 
@@ -26,18 +25,17 @@ A **free, open-source** AI-powered legal aid chatbot that helps Indian citizens 
 
 ---
 
-## ✨ Features
-
 | Feature | Description |
 |---|---|
-| 🤖 **AI-Powered Guidance** | Powered by Claude AI (Sonnet 4) with a carefully crafted legal system prompt |
+| 🤝 **Friendly Persona** | Designed as an empathetic "Law Helper" to make legal aid approachable |
+| 🗄 **Modern Sidebar** | Slide-out navigation for chat history and quick legal scenarios |
+| 🏔 **Floating Header** | Universal floating anchor for branding and theme controls |
+| 💊 **Pill-Box Input** | Unified, spacious input architecture with Ghost-UI tool buttons |
 | ⚖ **Indian Law Coverage** | Tenant law, consumer protection, labour law, family law, cyber crime, criminal law, RERA |
-| 🇮🇳 **Bilingual Support** | Ask questions in English or Hindi — get structured answers |
-| 📋 **Structured Responses** | Every answer includes: rights, relevant laws & sections, next steps, and where to approach |
+| 🇮🇳 **Bilingual Support** | Describe your problem in English, Hindi, or the language of your choice |
+| 🎤 **Voice & File Tools** | Integrated voice-to-text and document attachment capabilities |
 | 🔒 **Privacy First** | Zero data storage — no user data is saved or logged |
-| 📱 **Mobile Responsive** | Fully responsive UI that works seamlessly on all devices |
-| ⚡ **Quick Examples** | 6 pre-built legal scenarios to get started instantly |
-| 💬 **Conversational** | Full chat history for follow-up questions within a session |
+| ⚡ **Dynamic Scaling** | Smart input bar that expands width and height based on your prompt length |
 
 ---
 
@@ -49,22 +47,15 @@ A **free, open-source** AI-powered legal aid chatbot that helps Indian citizens 
 │                                                              │
 │   ┌──────────────────────────────────────────────────────┐   │
 │   │              React Frontend (Vite)                   │   │
-│   │  • Chat UI with sidebar + landing page               │   │
-│   │  • Pre-built legal query examples                    │   │
-│   │  • Auto-scrolling message stream                     │   │
+│   │  • Premium Layout (Sidebar + Floating Header)        │   │
+│   │  • Dynamic Pill-Box Input                            │   │
+│   │  • Voice & File Integration                          │   │
 │   └────────────────────┬─────────────────────────────────┘   │
 │                        │  POST /api/chat                     │
 └────────────────────────┼─────────────────────────────────────┘
                          │
                          ▼
 ┌──────────────────────────────────────────────────────────────┐
-│                  Express Backend (Node.js)                    │
-│                                                              │
-│   • Receives chat messages                                   │
-│   • Injects Indian law system prompt                         │
-│   • Forwards to Claude API                                   │
-│   • Returns structured legal guidance                        │
-│   • Health check endpoint at GET /api/health                 │
 │                                                              │
 │   Environment: ANTHROPIC_API_KEY, PORT                       │
 └────────────────────────┬─────────────────────────────────────┘
@@ -83,20 +74,11 @@ A **free, open-source** AI-powered legal aid chatbot that helps Indian citizens 
 ```
 ai-legal-aid/
 │
-├── frontend/                   # React + Vite client
-│   ├── src/
-│   │   ├── App.jsx             # Main chat UI component
-│   │   ├── App.css             # Complete application styling
-│   │   └── main.jsx            # React entry point
-│   ├── index.html              # HTML shell
-│   ├── vite.config.js          # Vite config with API proxy
-│   └── package.json
-│
-├── backend/                    # Express API server
-│   ├── server.js               # API routes + Claude integration
-│   ├── .env.example            # Environment variable template
-│   └── package.json
-│
+├── src/                        # React frontend source
+├── api/                        # Express proxy handlers
+├── python_engine/              # Vector DB & AI Logic (FastAPI)
+├── public/                     # Static assets & PWA manifest
+├── vite.config.js              # Vite configuration
 └── README.md
 ```
 
@@ -165,123 +147,39 @@ Navigate to **http://localhost:5173** in your browser. You're ready to go! 🎉
 
 ---
 
-## 🌐 Deployment
-
-### Backend → [Render](https://render.com) (Free Tier)
-
-| Setting | Value |
-|---|---|
-| **Root Directory** | `backend` |
-| **Build Command** | `npm install` |
-| **Start Command** | `npm start` |
-| **Environment Variable** | `ANTHROPIC_API_KEY` = your key |
-
-After deployment, note your backend URL (e.g. `https://nyaybot-backend.onrender.com`).
-
-### Frontend → [Vercel](https://vercel.com) (Free Tier)
-
-1. Import your GitHub repo on Vercel
-2. Set **Root Directory** to `frontend`
-3. Update the proxy target in `vite.config.js` to your Render backend URL
-4. Deploy — your app goes live at a URL like `https://nyaybot.vercel.app`
-
 ---
 
-## 🧪 API Reference
+## 🕒 Latest Updates (Hackathon Sprint)
 
-### `POST /api/chat`
-
-Send a conversation to the AI.
-
-**Request Body:**
-
-```json
-{
-  "messages": [
-    { "role": "user", "content": "My landlord won't return my deposit" }
-  ]
-}
-```
-
-**Response:**
-
-```json
-{
-  "reply": "**Legal Domain:** Tenant Law\n\n**Your Rights:** ..."
-}
-```
-
-### `GET /api/health`
-
-Health check endpoint.
-
-```json
-{ "status": "ok", "message": "NyayBot backend is running" }
-```
-
----
-
-## 🛠 Tech Stack
-
-| Layer | Technology | Version |
+| Feature | Description | Status |
 |---|---|---|
-| **Frontend** | React | 18.3 |
-| **Build Tool** | Vite | 5.4 |
-| **Backend** | Express.js | 4.19 |
-| **AI Engine** | Claude Sonnet 4 (Anthropic SDK) | 0.30 |
-| **Runtime** | Node.js (ES Modules) | 18+ |
+| **Local Inference** | Switched from Claude API to **100% Local Inference**. Llama-3 now runs locally on the edge via `llama-cpp-python`. No API costs, total privacy. | ✅ Done |
+| **Google Sign-In** | Migrated from Phone.email OTP to **Google Identity Services (GIS)**. 1-tap login for a smoother onboarding experience. | ✅ Done |
+| **OCR & Vision** | Implemented a Python OCR bridge to extract text from legal documents (PDFs/Images) uploaded by users. | ✅ Done |
+| **Premium Mobile UI** | Full glassmorphism redesign with a responsive side-drawer, sticky tool-headers, and smooth thread animations. | ✅ Done |
+| **Voice Interaction** | Added voice-to-text input supporting regional accents and multi-modal interaction. | ✅ Done |
 
 ---
 
-## 💡 Roadmap
+## 🏗 Updated Architecture
 
-> 📄 **[View Full Roadmap →](ROADMAP.md)** — 6 phases, 50+ planned features, timelines & priorities.
+NyayBot now uses a **3-tier Local Architecture** to comply with the "build these yourself" hackathon rules:
 
-| Phase | Focus | Status |
-|-------|-------|--------|
-| **Phase 1** — MVP | Chat UI, Claude AI, bilingual input, structured responses | ✅ Complete |
-| **Phase 2** — Enhanced UX | Dark mode, chat history, PDF export, markdown rendering | 📋 Planned |
-| **Phase 3** — Languages | Hindi/Marathi UI, voice input, text-to-speech, accessibility | 📋 Planned |
-| **Phase 4** — Intelligence | RAG pipeline, case law citations, legal document templates | 📋 Planned |
-| **Phase 5** — Distribution | WhatsApp bot, PWA, nearby legal aid centers, lawyer connect | 💭 Exploring |
-| **Phase 6** — Scale | Auth, analytics, rate limiting, API for partners, offline mode | 💭 Exploring |
+1. **The Brain (Python/FastAPI)**: Loads the GGUF model (Llama-3) using hardware acceleration (CUDA/Metal).
+2. **The Bridge (Node.js/Express)**: Manages sessions, system prompts, and acts as a security proxy.
+3. **The UI (React/Vite)**: A premium, mobile-first interface for civilian legal aid.
 
 ---
 
-## 🤝 Contributing
+## 🚀 Presentation Mode
 
-Contributions are welcome! Here's how:
-
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
-3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
-4. **Push** to the branch (`git push origin feature/amazing-feature`)
-5. **Open** a Pull Request
-
----
-
-## 🏆 Hackathon Pitch
-
-| | |
-|---|---|
-| **Problem** | Most Indians can't afford a lawyer and don't know their rights |
-| **Solution** | Free, instant AI legal guidance in plain language |
-| **Impact** | 1.4 billion people, massive legal literacy gap |
-| **Tech** | React + Node.js + Claude AI |
-| **Scalability** | Can expand to all 22 official Indian languages |
-| **Differentiator** | Structured responses with specific laws, sections & actionable next steps |
-
----
-
-## ⚠ Disclaimer
-
-> NyayBot provides **general legal information only** and is **not a substitute for professional legal advice**. For serious legal matters, please consult a qualified lawyer. Free legal aid is available at your nearest **District Legal Services Authority (DLSA)**.
+To launch the demo, follow the **[HACKATHON_RUNBOOK.md](HACKATHON_RUNBOOK.md)**. It requires starting the Brain, the Bridge, and the UI in three separate terminals.
 
 ---
 
 <div align="center">
 
-Built with ❤ for **Hackathon 2026**
+Built with ❤ for **Hackathon 2026** — Bridging India's Justice Gap.
 
 ⚖ *Nyay (न्याय) = Justice*
 
