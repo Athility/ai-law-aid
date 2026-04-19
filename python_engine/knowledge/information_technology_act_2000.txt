@@ -1,0 +1,15 @@
+Chapter I: Hacking and Data Theft
+Section 66 of the Information Technology Act, 2000 penalizes hacking with a computer system, data theft, and virus attacks. Any person who fraudulently or dishonestly damages a computer system, downloads data without permission, or causes denial of access faces imprisonment up to three years or a fine up to five lakh rupees.
+
+Chapter II: Identity Theft and Cheating
+Section 66C punishes Identity Theft. Whoever fraudulently or dishonestly makes use of the electronic signature, password, or any other unique identification feature of any other person faces imprisonment for a term which may extend to three years and a fine up to Rupees one lakh.
+Section 66D covers Cheating by Personation by using computer resources. This applies when someone creates a fake social media profile or impersonates another person online to cheat victims.
+
+Chapter III: Privacy Violations
+Section 66E deals with the violation of privacy. Publishing or transmitting images of private areas of any person without their consent is a punishable offense. This is commonly used in cases of revenge porn or hidden cameras. 
+
+Chapter IV: Cyber Harassment and Obscenity
+Section 67 penalizes publishing or transmitting obscene material in electronic form. Subsequent offenses carry higher penalties of up to seven years' imprisonment. 
+
+Where to approach:
+Victims of cybercrime should immediately report incidents on the National Cyber Crime Reporting Portal (cybercrime.gov.in) or call the toll-free helpline number 1930. Complaints can also be registered at the nearest Cyber Cell or local police station.

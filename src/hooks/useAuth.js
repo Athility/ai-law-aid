@@ -40,11 +40,16 @@ export default function useAuth() {
     setUser(null);
   }, []);
 
+  const getToken = useCallback(() => {
+    return user?.token || null;
+  }, [user]);
+
   return {
     user,
     anonId,
     login,
     logout,
-    isAuthenticated: !!user,
+    getToken,
+    isAuthenticated: !!user && !!user.token,
   };
 }

@@ -114,6 +114,201 @@
   height: 18px;
 }
 
+.stop-btn {
+  background: rgba(239, 68, 68, 0.15) !important;
+  border: 2px solid rgba(239, 68, 68, 0.5) !important;
+  color: #ef4444 !important;
+  animation: stop-pulse 1.5s infinite;
+}
+
+.stop-btn:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.25) !important;
+  opacity: 1 !important;
+}
+
+@keyframes stop-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.3); }
+  50% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+}
+
+/* ==================== ANALYSIS MODE DROPDOWN ==================== */
+.analysis-mode-dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.mode-trigger-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: 10px;
+  color: var(--text);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 13.5px;
+  min-width: 110px;
+}
+
+.mode-trigger-btn:hover {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+}
+
+.mode-trigger-btn.active {
+  background: var(--accent);
+  color: #000;
+  border-color: var(--accent);
+}
+
+.mode-trigger-btn .mode-icon {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.mode-trigger-btn .chevron-icon {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.3s ease;
+  margin-left: auto;
+  opacity: 0.6;
+}
+
+.mode-trigger-btn .chevron-icon.up {
+  transform: rotate(180deg);
+}
+
+.mode-menu {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 0;
+  width: 280px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 8px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: menu-up 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(10px);
+}
+
+@keyframes menu-up {
+  from { opacity: 0; transform: translateY(10px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.mode-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 10px;
+  width: 100%;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mode-option:hover {
+  background: var(--surface2);
+  border-color: var(--border);
+}
+
+.mode-option.active {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+}
+
+.option-icon {
+  font-size: 18px;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+/* Color Coding for Modes */
+.mode-option[class*="basic"] .option-icon {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+.mode-option[class*="advanced"] .option-icon {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+.mode-option[class*="deep"] .option-icon {
+  background: rgba(168, 85, 247, 0.1);
+  color: #a855f7;
+}
+
+/* Active State Colors */
+.mode-option.active[class*="basic"] { background: rgba(245, 158, 11, 0.08); border-color: rgba(245, 158, 11, 0.3); }
+.mode-option.active[class*="advanced"] { background: rgba(59, 130, 246, 0.08); border-color: rgba(59, 130, 246, 0.3); }
+.mode-option.active[class*="deep"] { background: rgba(168, 85, 247, 0.08); border-color: rgba(168, 85, 247, 0.3); }
+
+/* Trigger Button Dynamic Accent */
+.mode-trigger-btn.basic-active { border-color: rgba(245, 158, 11, 0.4); }
+.mode-trigger-btn.advanced-active { border-color: rgba(59, 130, 246, 0.4); }
+.mode-trigger-btn.deep-active { border-color: rgba(168, 85, 247, 0.4); }
+
+.mode-trigger-btn.basic-active .mode-icon { color: #f59e0b; }
+.mode-trigger-btn.advanced-active .mode-icon { color: #3b82f6; }
+.mode-trigger-btn.deep-active .mode-icon { color: #a855f7; }
+
+.option-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+}
+
+.option-label {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.option-desc {
+  font-size: 11.5px;
+  color: var(--text-dim);
+  line-height: 1.25;
+}
+
+.check-mark {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.mode-option[class*="basic"] .check-mark { color: #f59e0b; }
+.mode-option[class*="advanced"] .check-mark { color: #3b82f6; }
+.mode-option[class*="deep"] .check-mark { color: #a855f7; }
+
+@media (max-width: 768px) {
+  .mode-label {
+    display: none;
+  }
+  .mode-trigger-btn {
+    min-width: auto;
+    padding: 8px 10px;
+  }
+}
+
 /* ==================== ICON BUTTONS (Tools) ==================== */
 .icon-btn {
   width: 38px;

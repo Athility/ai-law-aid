@@ -1,0 +1,238 @@
+.shared-view {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- Header ---- */
+.shared-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 40px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.shared-header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.shared-logo {
+  font-size: 26px;
+  flex-shrink: 0;
+}
+
+.shared-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 400px;
+}
+
+.shared-meta {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.shared-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.shared-export-btn {
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text-muted);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.shared-export-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.shared-home-btn {
+  padding: 8px 16px;
+  background: var(--accent);
+  color: #0d0d0d;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.shared-home-btn:hover {
+  opacity: 0.85;
+}
+
+/* ---- Body ---- */
+.shared-chat-body {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.shared-readonly-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: rgba(201, 168, 76, 0.1);
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  border-radius: 100px;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  align-self: flex-start;
+}
+
+/* ---- Messages ---- */
+.shared-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.shared-message.user {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+  max-width: 75%;
+}
+
+.shared-message.assistant {
+  max-width: 100%;
+}
+
+.shared-bot-avatar {
+  width: 32px;
+  height: 32px;
+  background: var(--accent);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.shared-user-avatar {
+  width: 32px;
+  height: 32px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.shared-bubble {
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-size: 14.5px;
+  line-height: 1.75;
+}
+
+.shared-message.assistant .shared-bubble {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-bottom-left-radius: 4px;
+}
+
+.shared-message.user .shared-bubble {
+  background: var(--accent);
+  color: #0d0d0d;
+  border-bottom-right-radius: 4px;
+}
+
+.shared-message.user .shared-bubble p {
+  margin: 0;
+}
+
+/* ---- State Views ---- */
+.shared-view-state {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  text-align: center;
+  color: var(--text-muted);
+  background: var(--bg);
+  padding: 40px;
+}
+
+.shared-spinner {
+  font-size: 40px;
+  animation: spinEmoji 1.5s linear infinite;
+}
+
+@keyframes spinEmoji {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.shared-error-icon {
+  font-size: 48px;
+}
+
+.shared-view-state.error h2 {
+  font-size: 22px;
+  color: var(--text);
+  margin: 0;
+}
+
+.shared-view-state.error p {
+  font-size: 14px;
+  color: var(--text-dim);
+  max-width: 400px;
+}
+
+.shared-home-link {
+  margin-top: 8px;
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.shared-home-link:hover {
+  text-decoration: underline;
+}

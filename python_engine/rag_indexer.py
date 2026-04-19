@@ -1,6 +1,5 @@
 import chromadb
-from chromadb.utils import embedding_functions
-from sentence_transformers import SentenceTransformer
+from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
 import os
 
 # 1. Setup local embedding function (no API key needed)
@@ -10,11 +9,7 @@ CHROMA_PATH = "./chroma_db"
 
 print(f"Loading embedding model: {EMBED_MODEL}...")
 # We use sentence_transformers directly to ensure offline reliability
-embedding_model = SentenceTransformer(EMBED_MODEL)
-
-class LocalEmbeddingFunction:
-    def __call__(self, input: list):
-        return embedding_model.encode(input).tolist()
+embedding_function = SentenceTransformerEmbeddingFunction(model_name=EMBED_MODEL)
 
 def get_chroma_client():
     return chromadb.PersistentClient(path=CHROMA_PATH)
@@ -24,7 +19,7 @@ def index_legal_docs(docs_dir="./knowledge"):
     # Create or get the legal collection
     collection = client.get_or_create_collection(
         name="indian_law",
-        embedding_function=LocalEmbeddingFunction()
+        embedding_function=embedding_function
     )
 
     if not os.path.exists(docs_dir):

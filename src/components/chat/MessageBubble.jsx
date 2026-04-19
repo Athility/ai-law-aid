@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { parseMarkdown } from "../utils/markdown";
-import exportPdf from "../utils/exportPdf";
-import useVoiceOutput from "../hooks/useVoiceOutput";
+import { parseMarkdown } from "../../utils/markdown";
+import exportPdf from "../../utils/exportPdf";
+import useVoiceOutput from "../../hooks/useVoiceOutput";
 import "./MessageBubble.css";
 
 export default function MessageBubble({ message, prevMessage }) {
@@ -21,7 +21,7 @@ export default function MessageBubble({ message, prevMessage }) {
 
   const handleExportPdf = () => {
     const userQuestion = prevMessage?.role === "user" ? prevMessage.content : null;
-    exportPdf(message.content, userQuestion);
+    exportPdf(message.content, userQuestion, null, "NyayBot Legal Analysis");
   };
 
   return (

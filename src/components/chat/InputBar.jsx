@@ -1,9 +1,29 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import "./InputBar.css";
 
-export default function InputBar({ input, setInput, onSend, loading, inputRef, voice, attachment, setAttachment }) {
+export default function InputBar({ input, setInput, onSend, onStop, loading, inputRef, voice, attachment, setAttachment, analysisMode, setAnalysisMode }) {
   const [showLangPicker, setShowLangPicker] = useState(false);
+  const [showModePicker, setShowModePicker] = useState(false);
   const fileInputRef = useRef(null);
+  const modePickerRef = useRef(null);
+
+  const MODES = [
+    { id: 'basic', label: 'Basic', icon: '⚡', desc: 'Fast, essential legal guidance.' },
+    { id: 'advanced', label: 'Advanced', icon: '🔍', desc: 'Detailed case law search.' },
+    { id: 'deep', label: 'Deep', icon: '💎', desc: 'Full citations & legal strategy.' }
+  ];
+
+  const activeMode = MODES.find(m => m.id === analysisMode) || MODES[0];
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (modePickerRef.current && !modePickerRef.current.contains(e.target)) {
+        setShowModePicker(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleKey = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -79,6 +99,40 @@ export default function InputBar({ input, setInput, onSend, loading, inputRef, v
               onChange={handleFileChange} 
             />
 
+            {/* Analysis Mode Dropdown */}
+            <div className="analysis-mode-dropdown" ref={modePickerRef}>
+              <button 
+                className={`mode-trigger-btn ${analysisMode}-active ${showModePicker ? 'active' : ''}`}
+                onClick={() => setShowModePicker(!showModePicker)}
+                title="Select Analysis Mode"
+              >
+                <span className="mode-icon">{activeMode.icon}</span>
+                <span className="mode-label">{activeMode.label}</span>
+                <svg className={`chevron-icon ${showModePicker ? 'up' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
+
+              {showModePicker && (
+                <div className="mode-menu">
+                  {MODES.map((m) => (
+                    <button
+                      key={m.id}
+                      className={`mode-option ${m.id} ${analysisMode === m.id ? 'active' : ''}`}
+                      onClick={() => { setAnalysisMode(m.id); setShowModePicker(false); }}
+                    >
+                      <div className="option-icon">{m.icon}</div>
+                      <div className="option-details">
+                        <span className="option-label">{m.label}</span>
+                        <span className="option-desc">{m.desc}</span>
+                      </div>
+                      {analysisMode === m.id && <span className="check-mark">✓</span>}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
             {/* Voice controls */}
             {voice?.supported && (
               <div className="voice-controls">
@@ -133,15 +187,27 @@ export default function InputBar({ input, setInput, onSend, loading, inputRef, v
           </div>
           
           <div className="right-tools">
-            <button
-              className="send-btn"
-              onClick={onSend}
-              disabled={loading || (!input.trim() && !attachment)}
-            >
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M2 21l21-9L2 3v7l15 2-15 2z" />
-              </svg>
-            </button>
+            {loading ? (
+              <button
+                className="send-btn stop-btn"
+                onClick={onStop}
+                title="Stop generating"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <rect x="6" y="6" width="12" height="12" rx="2" />
+                </svg>
+              </button>
+            ) : (
+              <button
+                className="send-btn"
+                onClick={onSend}
+                disabled={!input.trim() && !attachment}
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M2 21l21-9L2 3v7l15 2-15 2z" />
+                </svg>
+              </button>
+            )}
           </div>
         </div>
       </div>

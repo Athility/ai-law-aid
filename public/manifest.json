@@ -1,0 +1,18 @@
+{
+  "short_name": "NyayBot",
+  "name": "NyayBot: AI Legal Aid for India",
+  "description": "Free AI-powered legal assistance in plain language.",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "192x192 512x512 any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#0d0d0d",
+  "background_color": "#0d0d0d",
+  "orientation": "portrait"
+}

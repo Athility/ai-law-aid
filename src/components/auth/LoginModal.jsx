@@ -23,7 +23,7 @@ function parseJwt(token) {
   }
 }
 
-export default function LoginModal({ onClose, onLogin }) {
+export default function LoginModal({ onClose, onLogin, onTermsClick }) {
   const googleBtnRef = useRef(null);
 
   useEffect(() => {
@@ -48,7 +48,8 @@ export default function LoginModal({ onClose, onLogin }) {
                 name: userData.name,
                 email: userData.email,
                 picture: userData.picture,
-                provider: "google"
+                provider: "google",
+                token: response.credential
               });
             }
           },
@@ -86,24 +87,34 @@ export default function LoginModal({ onClose, onLogin }) {
 
         <div className="modal-header">
           <div className="modal-icon-container">
-            <span className="modal-icon">👤</span>
+            <div className="legal-icon-wrapper">
+              <svg className="legal-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                <path d="M12 8v4" />
+                <path d="M12 16h.01" />
+              </svg>
+              <div className="icon-glow"></div>
+            </div>
           </div>
-          <h2>Welcome to NyayBot</h2>
-          <p>Sign in with Google to save your legal case history and access advanced analysis.</p>
+          <h2 className="premium-title">Welcome to NyayBot</h2>
+          <p className="premium-subtitle">Sign in with Google to save your legal case history and access advanced analysis.</p>
         </div>
 
         <div className="auth-container">
           {/* Google will render its button exactly here */}
           <div ref={googleBtnRef} id="googleBtn" className="google-btn-wrapper"></div>
 
-          <p className="auth-note" style={{ marginTop: "24px" }}>
-            Signing in ensures your case data is <span>encrypted</span> and accessible only by you.
+          <p className="auth-note">
+            Signing in ensures your case data is <span className="highlight-text">encrypted</span> and accessible only by you.
           </p>
         </div>
 
         <div className="modal-footer">
           <p>
-            By signing in, you agree to our <span>Terms & Conditions</span>
+            By signing in, you agree to our{" "}
+            <span className="terms-link-btn" onClick={onTermsClick}>
+              Terms & Conditions
+            </span>
           </p>
         </div>
       </div>

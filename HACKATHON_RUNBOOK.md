@@ -7,6 +7,19 @@ On presentation day, make sure you open **three (3)** separate terminal windows 
 
 ---
 
+### Step 0: Initialize the Legal Database (Run Once)
+*Before the demo, populate the offline ChromaDB with local acts and laws so the "Deep Analysis" mode can cite sources.*
+
+**Commands:**
+```powershell
+cd python_engine
+.\venv\Scripts\activate
+python rag_indexer.py
+```
+*Wait until it says "Indexing complete."*
+
+---
+
 ### Terminal 1: Start the Python AI Engine (The Brain)
 *This terminal loads your downloaded local model into memory and exposes the OpenAI-compatible local API.*
 
@@ -24,7 +37,7 @@ Wait until you see the following lines:
 ---
 
 ### Terminal 2: Start the Node.js API Proxy (The Bridge)
-*This terminal runs your secure Node server, holding your `SYSTEM_PROMPT` and forwarding React requests to the Python engine.*
+*This terminal runs your secure Node server, handling CORS, sessions, and safely forwarding React parameters (like language and analysis_mode) to the Python engine.*
 
 **Commands:**
 ```powershell
