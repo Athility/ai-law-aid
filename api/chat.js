@@ -19,10 +19,15 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Invalid messages format" });
     }
 
+    const PYTHON_ENGINE_URL = process.env.PYTHON_ENGINE_URL || "http://localhost:5000/v1/chat/completions";
+
     // Call the local Python engine using native fetch to support custom parameters
-    const pythonResponse = await fetch("http://localhost:5000/v1/chat/completions", {
+    const pythonResponse = await fetch(PYTHON_ENGINE_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "69420"
+      },
       body: JSON.stringify({
         messages: messages,
         max_tokens: 1024,

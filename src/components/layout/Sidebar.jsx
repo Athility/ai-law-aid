@@ -20,6 +20,7 @@ export default function Sidebar({
   onLogout,
   isOpen,
   onClose,
+  onSettingsClick,
 }) {
   const [openMenuId, setOpenMenuId] = useState(null);
   const menuRef = useRef(null);
@@ -165,9 +166,11 @@ export default function Sidebar({
             </div>
           </button>
         )}
-        
         <div className="footer-links">
-          <span>Built for Hackathon 2026</span>
+          <button className="settings-trigger-btn" onClick={onSettingsClick}>
+            <span className="settings-icon">⚙️</span> Settings
+          </button>
+          <span style={{ fontSize: '12px', color: 'var(--text-dim)' }}>Built for Hackathon 2026</span>
         </div>
       </div>
     </aside>

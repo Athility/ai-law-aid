@@ -2,6 +2,7 @@ import { useState, useRef, useMemo, useCallback } from "react";
 import { parseJrfFile } from "../../utils/jrfUtils";
 import { exportCounselPdf } from "../../utils/CounselPdfExport";
 import { analyzeDossier, extractStatutes, extractTimeline } from "../../utils/dossierAnalysis";
+import useTheme from "../../hooks/useTheme";
 import "./CounselPortal.css";
 
 export default function CounselPortal() {
@@ -13,6 +14,7 @@ export default function CounselPortal() {
   const [noticeType, setNoticeType] = useState("general");
   const [noticeContent, setNoticeContent] = useState(null);
   const [generatingNotice, setGeneratingNotice] = useState(false);
+  const { theme, toggleTheme } = useTheme();
   const fileInputRef = useRef(null);
 
   const handleVerify = (e) => {
@@ -71,8 +73,16 @@ export default function CounselPortal() {
   // ==================== AUTH SCREEN ====================
   if (!verified) {
     return (
-      <div className="counsel-auth-wrapper">
+      <div className="counsel-auth-wrapper" data-theme={theme}>
         <div className="counsel-auth-card">
+          <div className="auth-header-toggle">
+            <button className="theme-toggle" onClick={toggleTheme} title="Toggle Theme">
+              <span className="theme-icons-wrapper">
+                <span className={`icon-sun ${theme === "dark" ? "visible" : "hidden"}`}>☀️</span>
+                <span className={`icon-moon ${theme === "light" ? "visible" : "hidden"}`}>🌙</span>
+              </span>
+            </button>
+          </div>
           <div className="counsel-emblem">⚖️</div>
           <h2>Advocate Verification</h2>
           <p>This portal is restricted to verified legal counsel.</p>
@@ -104,10 +114,18 @@ export default function CounselPortal() {
 
   // ==================== MAIN PORTAL ====================
   return (
-    <div className="counsel-portal">
+    <div className="counsel-portal" data-theme={theme}>
       <div className="counsel-header">
-        <h1>Advocate Private Counsel Workspace</h1>
-        <p className="counsel-tagline">Secure Analysis & Dossier Review</p>
+        <div className="counsel-header-main">
+          <h1>Advocate Private Counsel Workspace</h1>
+          <p className="counsel-tagline">Secure Analysis & Dossier Review</p>
+        </div>
+        <button className="theme-toggle" onClick={toggleTheme} title="Toggle Theme">
+          <span className="theme-icons-wrapper">
+            <span className={`icon-sun ${theme === "dark" ? "visible" : "hidden"}`}>☀️</span>
+            <span className={`icon-moon ${theme === "light" ? "visible" : "hidden"}`}>🌙</span>
+          </span>
+        </button>
       </div>
 
       {!dossier ? (

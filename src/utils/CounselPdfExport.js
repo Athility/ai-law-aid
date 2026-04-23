@@ -22,17 +22,17 @@ export function exportCounselPdf(dossier) {
       .replace(/>/g, "&gt;")
       // Bold headings like **Statement of Facts**
       .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-      // Numbered items: 1. Text  →  styled list item
+      // Numbered items: 1. Text  →  styled list item (simplified for stability)
       .replace(/^(\d+)\.\s+(.+)$/gm,
-        '<div style="display:flex;gap:10px;margin:6px 0 6px 16px;"><span style="font-weight:700;min-width:22px;color:#333;">$1.</span><span>$2</span></div>')
+        '<div style="margin:10px 0;padding-left:24px;text-indent:-24px;page-break-inside:avoid;"><strong>$1.</strong> &nbsp; $2</div>')
       // Bullet items: * Text or - Text
       .replace(/^[\*\-]\s+(.+)$/gm,
-        '<div style="display:flex;gap:10px;margin:6px 0 6px 16px;"><span style="color:#8b7033;min-width:14px;">•</span><span>$1</span></div>')
+        '<div style="margin:10px 0;padding-left:24px;text-indent:-24px;page-break-inside:avoid;"><span style="color:#8b7033;">•</span> &nbsp; $1</div>')
       // Section-style lines that are all-caps or look like headers
       .replace(/^((?:Statement of Facts|Statutory Analysis|Prima Facie|Legal Theme|Relevant|What You Should|Where to Approach|Strategic Notice|Conclusion)[^\n]*)/gim,
-        '<p style="font-weight:700;font-size:15px;margin:20px 0 8px 0;color:#1a1a1a;border-bottom:1px solid #ddd;padding-bottom:4px;">$1</p>')
+        '<p style="font-weight:700;font-size:15px;margin:22px 0 10px 0;color:#1a1a1a;border-bottom:1px solid #eee;padding-bottom:6px;page-break-after:avoid;">$1</p>')
       // Double newlines → new paragraph
-      .replace(/\n\n/g, '</p><p style="margin:10px 0;">')
+      .replace(/\n\n/g, '</p><p style="margin:10px 0;page-break-inside:avoid;">')
       // Single newlines → line break
       .replace(/\n/g, '<br />');
   };
@@ -62,7 +62,7 @@ export function exportCounselPdf(dossier) {
         '<div style="text-align:center;color:#999;font-size:11px;font-style:italic;margin:16px 0;">— Earlier transcripts truncated for brevity —</div>')
       // Numbered items
       .replace(/^(\d+)\.\s+(.+)$/gm,
-        '<div style="display:flex;gap:8px;margin:4px 0 4px 12px;"><span style="font-weight:600;min-width:18px;">$1.</span><span>$2</span></div>')
+        '<div style="margin:6px 0;padding-left:20px;text-indent:-20px;page-break-inside:avoid;"><strong>$1.</strong> &nbsp; $2</div>')
       // Double newlines → space
       .replace(/\n\n/g, '</div><div style="margin:4px 0;">')
       // Single newlines
@@ -100,9 +100,9 @@ export function exportCounselPdf(dossier) {
   // ========== SECTION 1: LEGAL BRIEF ==========
   const briefSection = `
     <div style="page-break-before:always;padding:0 10px;">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid #1a1a1a;">
-        <span style="font-size:24px;">§</span>
-        <h2 style="margin:0;font-size:20px;text-transform:uppercase;letter-spacing:1px;">Statutory Analysis &amp; Executive Summary</h2>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:28px;padding-bottom:14px;border-bottom:1px solid #f0f0f0;">
+        <span style="font-size:24px;color:#8b7033;">§</span>
+        <h2 style="margin:0;font-size:18px;text-transform:uppercase;letter-spacing:1.5px;color:#1a1a1a;">Statutory Analysis &amp; Executive Summary</h2>
       </div>
       <div style="font-size:14px;text-align:left;line-height:1.8;">
         <p style="margin:0;">${formatLegalText(dossier.legalBrief)}</p>
@@ -113,9 +113,9 @@ export function exportCounselPdf(dossier) {
   // ========== SECTION 2: RAW TRANSCRIPTS ==========
   const transcriptSection = `
     <div style="page-break-before:always;padding:0 10px;">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid #1a1a1a;">
-        <span style="font-size:24px;">📎</span>
-        <h2 style="margin:0;font-size:20px;text-transform:uppercase;letter-spacing:1px;">Annexure: Raw Transcripts</h2>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:28px;padding-bottom:14px;border-bottom:1px solid #f0f0f0;">
+        <span style="font-size:24px;color:#8b7033;">📎</span>
+        <h2 style="margin:0;font-size:18px;text-transform:uppercase;letter-spacing:1.5px;color:#1a1a1a;">Annexure: Raw Transcripts</h2>
       </div>
       <p style="font-size:12px;color:#888;font-style:italic;margin:0 0 20px 0;">
         The following is a verbatim record of all client-AI interactions in this dossier.
@@ -141,7 +141,7 @@ export function exportCounselPdf(dossier) {
     </div>
   `;
 
-  container.innerHTML = `<div style="padding:30px;">${titlePage}${briefSection}${transcriptSection}${disclaimer}</div>`;
+  container.innerHTML = `<div style="padding:20px 30px;">${titlePage}${briefSection}${transcriptSection}${disclaimer}</div>`;
 
   const filename = `${dossier.metadata.folderName.replace(/\s+/g, '_')}_Legal_Brief.pdf`;
 
@@ -152,7 +152,7 @@ export function exportCounselPdf(dossier) {
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
       jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-      pagebreak: { mode: ["css", "legacy"] },
+      pagebreak: { mode: ["css", "legacy"], avoid: '.panel-header-bar, .statute-card, .timeline-node' },
     })
     .from(container)
     .save();

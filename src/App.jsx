@@ -16,6 +16,7 @@ import ShareModal from "./components/chat/ShareModal";
 import SharedChatView from "./components/chat/SharedChatView";
 import DossierCenter from "./components/layout/DossierCenter";
 import CounselPortal from "./components/counsel/CounselPortal";
+import SettingsModal from "./components/layout/SettingsModal";
 import exportPdf from "./utils/exportPdf";
 import "./App.css";
 
@@ -71,6 +72,7 @@ export default function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
   const [showShare, setShowShare] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [shareTargetChatId, setShareTargetChatId] = useState(null);
   const [analysisMode, setAnalysisMode] = useState("basic");
   const inputRef = useRef(null);
@@ -93,6 +95,7 @@ export default function App() {
     moveToFolder,
     loadById,
     remove,
+    clearAll,
     refresh,
   } = useChatHistory(user, getToken);
 
@@ -348,7 +351,10 @@ export default function App() {
               onClick={toggleTheme}
               title="Toggle theme"
             >
-              {theme === "dark" ? "☀️" : "🌙"}
+              <span className="theme-icons-wrapper">
+                <span className={`icon-sun ${theme === "dark" ? "visible" : "hidden"}`}>☀️</span>
+                <span className={`icon-moon ${theme === "light" ? "visible" : "hidden"}`}>🌙</span>
+              </span>
             </button>
           </div>
         </header>
@@ -374,6 +380,7 @@ export default function App() {
           onLogout={logout}
           isOpen={sidebarOpen}
           onClose={() => setSidebarOpen(false)}
+          onSettingsClick={() => setShowSettings(true)}
         />
       )}
 
@@ -474,6 +481,17 @@ export default function App() {
           user={user}
           getToken={getToken}
           onClose={() => setShowShare(false)}
+        />
+      )}
+
+      {showSettings && (
+        <SettingsModal 
+          onClose={() => setShowSettings(false)} 
+          onClearHistory={() => {
+            clearAll();
+            handleClearChat(); // Also clears active current chat UI
+          }}
+          historyCount={history.length}
         />
       )}
     </div>

@@ -53,11 +53,9 @@ export default function useChatHistory(user, getToken) {
   }, []);
 
   // Sync down from Firestore when user logs in
-  useEffect(() => {
+  const refresh = useCallback(async () => {
     if (!isAuthenticated) return;
-
-    const fetchCloudData = async () => {
-      try {
+    try {
         const token = getToken();
         if (!token) return;
 
@@ -124,10 +122,11 @@ export default function useChatHistory(user, getToken) {
       } catch (err) {
         console.error("Cloud sync error:", err);
       }
-    };
-
-    fetchCloudData();
   }, [isAuthenticated, user?.id, getToken]);
+
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
 
   const saveToCloud = useCallback(async (chatPayload) => {
     if (!isAuthenticated) return;
@@ -241,10 +240,22 @@ export default function useChatHistory(user, getToken) {
     });
   }, [saveToCloud]);
 
-  const refresh = useCallback(() => {
-    setHistory(loadAllLocal());
-    setFolders(loadFoldersLocal());
-  }, []);
+  const clearAll = useCallback(async () => {
+    setHistory([]);
+    setFolders([{ id: "general", name: "General Cases", createdAt: Date.now(), updatedAt: Date.now() }]);
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(FOLDERS_KEY);
+    
+    if (isAuthenticated) {
+      try {
+        const token = getToken();
+        await fetch("/api/chats", { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
+        // Optionally handle folders deletion on cloud too if the API supports it
+      } catch (err) {
+        console.error("Failed to clear cloud history:", err);
+      }
+    }
+  }, [isAuthenticated, getToken]);
 
-  return { history, folders, save, addFolder, removeFolder, moveToFolder, loadById, remove, refresh };
+  return { history, folders, save, addFolder, removeFolder, moveToFolder, loadById, remove, clearAll, refresh };
 }

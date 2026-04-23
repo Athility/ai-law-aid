@@ -34,21 +34,21 @@
 
 /* ==================== LIGHT THEME ==================== */
 [data-theme="light"] {
-  --accent: #b08d30;
-  --accent-dim: rgba(176, 141, 48, 0.12);
-  --bg: #fdfaf5; /* Warm cream/ivory */
+  --accent: #9a7d41;
+  --accent-dim: rgba(154, 125, 65, 0.12);
+  --bg: #fcfaf7; /* Warmer, cleaner cream */
   --surface: #ffffff;
-  --surface2: #ece4d8;
-  --border: rgba(0, 0, 0, 0.06);
+  --surface2: #f4efea;
+  --border: rgba(0, 0, 0, 0.08); /* Slightly stronger border */
   --text: #1a1a1a;
-  --text-muted: #555555;
-  --text-dim: #999999;
+  --text-muted: #4a4a4a; /* Darker muted text */
+  --text-dim: #777777; /* Darker dimmed text for visibility */
   --user-bg: #b8941f;
   --user-text: #fff;
   
-  --glass-bg: rgba(255, 255, 255, 0.8);
-  --glass-border: rgba(0, 0, 0, 0.05);
-  --shadow-premium: 0 8px 32px rgba(180, 160, 120, 0.15);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --shadow-premium: 0 10px 40px rgba(180, 160, 120, 0.2);
 }
 
 html,
@@ -63,7 +63,22 @@ body {
   color: var(--text);
   font-size: 15px;
   line-height: 1.6;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 2s ease-in-out, color 2s ease-in-out;
+}
+
+/* Premium Global Interactive Glow */
+button:hover:not(:disabled),
+select:hover:not(:disabled),
+select:focus,
+input[type="checkbox"]:hover,
+.action-btn:hover,
+.settings-trigger-btn:hover,
+.login-trigger-btn:hover {
+  box-shadow: 0 0 12px var(--accent-dim);
+}
+
+.app, .main, .sidebar, .chat-area, .message, .input-container {
+  transition: background-color 2s ease-in-out, background 2s ease-in-out, color 2s ease-in-out, border-color 2s ease-in-out;
 }
 
 .app {
@@ -190,11 +205,51 @@ body {
   justify-content: center;
   font-size: 18px;
   transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
 }
 
 .theme-toggle:hover {
   border-color: var(--accent);
   background: var(--accent-dim);
+}
+
+/* --- Theme Icon Animation --- */
+.theme-icons-wrapper {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-sun, .icon-moon {
+  position: absolute;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-sun.visible {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+.icon-sun.hidden {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.3);
+}
+
+.icon-moon.visible {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+.icon-moon.hidden {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.3);
 }
 
 /* ==================== BACKDROP ==================== */

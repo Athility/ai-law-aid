@@ -29,7 +29,7 @@
 .page-title {
   font-size: 2rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #fff 0%, #a8a8a8 100%);
+  background: linear-gradient(135deg, var(--text) 0%, var(--text-muted) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 8px;
@@ -68,11 +68,11 @@
 
 .dossier-search {
   width: 100%;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(197, 160, 89, 0.2);
+  background: var(--surface2);
+  border: 1px solid var(--border);
   padding: 16px 20px;
   border-radius: 12px;
-  color: #fff;
+  color: var(--text);
   font-size: 1rem;
   margin-bottom: 40px;
   outline: none;
@@ -94,22 +94,70 @@
 .dossier-card {
   position: relative;
   height: 200px;
-  border-radius: 20px;
+  border-radius: 0 16px 16px 16px;
   padding: 24px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(30, 41, 59, 0.4); /* Deep Slate */
+  border: 1px solid var(--border);
+  background: var(--surface2); 
   backdrop-filter: blur(16px);
+  margin-top: 30px;
+  z-index: 1; /* Establishes stacking context */
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+/* The Folder Tab (Back part of the folder) */
+.dossier-card::before {
+  content: '';
+  position: absolute;
+  top: -25px;
+  left: -1px;
+  width: 140px;
+  height: 30px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+  z-index: -2;
+  transition: all 0.4s ease;
+}
+
+/* The Paper (Slides out on hover) */
+.dossier-card::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  right: 20px;
+  height: 100px;
+  background-color: #f8fafc;
+  background-image: linear-gradient(#cbd5e1 1px, transparent 1px);
+  background-size: 100% 20px;
+  background-position: 0 10px;
+  border-radius: 6px 6px 0 0;
+  border: 1px solid #cbd5e1;
+  border-bottom: none;
+  z-index: -1;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  opacity: 0.5;
 }
 
 .dossier-card:hover {
-  transform: scale(1.02);
-  border-color: rgba(197, 160, 89, 0.5);
+  transform: translateY(-6px);
+  border-color: var(--accent);
+  box-shadow: 0 12px 30px rgba(201, 168, 76, 0.15);
+}
+
+.dossier-card:hover::before {
+  border-color: var(--accent);
+}
+
+.dossier-card:hover::after {
+  top: -45px;
+  opacity: 1;
 }
 
 .card-top {
@@ -126,8 +174,8 @@
 
 .activity-tag {
   font-size: 0.7rem;
-  color: #888;
-  background: rgba(0,0,0,0.2);
+  color: var(--text-dim);
+  background: var(--accent-dim);
   padding: 4px 10px;
   border-radius: 20px;
 }
@@ -140,7 +188,7 @@
   font-size: 1.4rem;
   font-weight: 700;
   margin-bottom: 4px;
-  color: #fff;
+  color: var(--text);
 }
 
 .chat-count {
