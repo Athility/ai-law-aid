@@ -58,4 +58,30 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+// === DELETE: Clear all folders for user ===
+router.delete("/", async (req, res) => {
+  try {
+    if (!db) return res.status(503).json({ error: "Firestore configuration missing" });
+
+    const userId = req.user.sub;
+    const foldersRef = db.collection("users").doc(userId).collection("folders");
+    const snapshot = await foldersRef.get();
+
+    if (snapshot.empty) {
+      return res.json({ success: true, message: "No folders to delete." });
+    }
+
+    const batch = db.batch();
+    snapshot.docs.forEach((doc) => {
+      batch.delete(doc.ref);
+    });
+    await batch.commit();
+
+    res.json({ success: true, message: "All folders deleted." });
+  } catch (error) {
+    console.error("Error clearing folders:", error);
+    res.status(500).json({ error: "Failed to clear folders" });
+  }
+});
+
 export default router;

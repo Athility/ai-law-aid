@@ -249,8 +249,10 @@ export default function useChatHistory(user, getToken) {
     if (isAuthenticated) {
       try {
         const token = getToken();
+        // Clear cloud chats
         await fetch("/api/chats", { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
-        // Optionally handle folders deletion on cloud too if the API supports it
+        // Clear cloud folders
+        await fetch("/api/folders", { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
       } catch (err) {
         console.error("Failed to clear cloud history:", err);
       }

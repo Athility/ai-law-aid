@@ -126,24 +126,7 @@
 }
 
 /* The Paper (Slides out on hover) */
-.dossier-card::after {
-  content: '';
-  position: absolute;
-  top: 10px;
-  left: 20px;
-  right: 20px;
-  height: 100px;
-  background-color: #f8fafc;
-  background-image: linear-gradient(#cbd5e1 1px, transparent 1px);
-  background-size: 100% 20px;
-  background-position: 0 10px;
-  border-radius: 6px 6px 0 0;
-  border: 1px solid #cbd5e1;
-  border-bottom: none;
-  z-index: -1;
-  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  opacity: 0.5;
-}
+/* Paper removed as requested */
 
 .dossier-card:hover {
   transform: translateY(-6px);
@@ -153,11 +136,6 @@
 
 .dossier-card:hover::before {
   border-color: var(--accent);
-}
-
-.dossier-card:hover::after {
-  top: -45px;
-  opacity: 1;
 }
 
 .card-top {

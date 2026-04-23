@@ -75,6 +75,7 @@ export default function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [shareTargetChatId, setShareTargetChatId] = useState(null);
   const [analysisMode, setAnalysisMode] = useState("basic");
+  const [language, setLanguage] = useState(() => localStorage.getItem('nyay_language') || 'en-IN');
   const inputRef = useRef(null);
   const abortControllerRef = useRef(null);
 
@@ -104,6 +105,11 @@ export default function App() {
       setInput((prev) => (prev ? prev + " " : "") + transcript);
     }, []),
   );
+
+  // Sync language with localStorage
+  useEffect(() => {
+    localStorage.setItem('nyay_language', language);
+  }, [language]);
 
   const handleNewChat = useCallback((folderId = null) => {
     if (messages.length > 0) {
@@ -238,7 +244,7 @@ export default function App() {
         body: JSON.stringify({
           messages: newHistory,
           analysisMode: analysisMode,
-          language: voice?.lang || "en-US",
+          language: language || voice?.lang || "en-IN",
         }),
         signal: controller.signal,
       });
@@ -492,6 +498,12 @@ export default function App() {
             handleClearChat(); // Also clears active current chat UI
           }}
           historyCount={history.length}
+          analysisMode={analysisMode}
+          setAnalysisMode={setAnalysisMode}
+          language={language}
+          setLanguage={setLanguage}
+          user={user}
+          voice={voice}
         />
       )}
     </div>

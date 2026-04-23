@@ -28,43 +28,42 @@ NyayBot is your **Friendly AI Law Helper** — a professional, premium legal aid
 | Feature | Description |
 |---|---|
 | 🤝 **Friendly Persona** | Designed as an empathetic "Law Helper" to make legal aid approachable |
-| 🗄 **Modern Sidebar** | Slide-out navigation for chat history and quick legal scenarios |
-| 🏔 **Floating Header** | Universal floating anchor for branding and theme controls |
-| 💊 **Pill-Box Input** | Unified, spacious input architecture with Ghost-UI tool buttons |
+| ☁️ **Cloud Sync Persistence** | Securely syncs your chat history and folders across devices using Firebase/Firestore |
+| 🗑️ **Total Privacy Control** | Bulk delete functionality ensures your data is completely wiped from both local storage and the cloud |
 | ⚖ **Indian Law Coverage** | Tenant law, consumer protection, labour law, family law, cyber crime, criminal law, RERA |
-| 🇮🇳 **Bilingual Support** | Describe your problem in English, Hindi, or the language of your choice |
-| 🎤 **Voice & File Tools** | Integrated voice-to-text and document attachment capabilities |
-| 🔒 **Privacy First** | Zero data storage — no user data is saved or logged |
-| ⚡ **Dynamic Scaling** | Smart input bar that expands width and height based on your prompt length |
+| 🇮🇳 **10+ Regional Languages** | Unified voice dialect and AI response language sync across the entire app |
+| 🎤 **Voice & OCR Tools** | Integrated voice-to-text input and document parsing via a Python vision bridge |
+| 💎 **Premium UI** | Dossier Center with glassmorphism aesthetics, dynamic pill-box inputs, and responsive drawers |
 
 ---
 
 ## 🏗 Architecture
 
+NyayBot utilizes a modern, hybrid architecture combining serverless cloud infrastructure with a powerful local/dedicated Python engine.
+
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │                         USER (Browser)                       │
-│                                                              │
 │   ┌──────────────────────────────────────────────────────┐   │
 │   │              React Frontend (Vite)                   │   │
-│   │  • Premium Layout (Sidebar + Floating Header)        │   │
-│   │  • Dynamic Pill-Box Input                            │   │
-│   │  • Voice & File Integration                          │   │
-│   └────────────────────┬─────────────────────────────────┘   │
-│                        │  POST /api/chat                     │
-└────────────────────────┼─────────────────────────────────────┘
-                         │
-                         ▼
+│   │  • Premium Dossier Center & Chat UI                  │   │
+│   │  • Voice Recognition & Unified Settings              │   │
+│   └────────────────────┬───────────▲─────────────────────┘   │
+└────────────────────────┼───────────┼─────────────────────────┘
+            API Requests │           │ Real-time Sync
+                         ▼           │
 ┌──────────────────────────────────────────────────────────────┐
-│                                                              │
-│   Environment: ANTHROPIC_API_KEY, PORT                       │
-└────────────────────────┬─────────────────────────────────────┘
-                         │
-                         ▼
-              ┌────────────────────┐
-              │   Anthropic API    │
-              │   Claude Sonnet 4  │
-              └────────────────────┘
+│                  Vercel Edge API (Node.js)                   │
+│  • /api/chat (Proxy)    • /api/chats, /api/folders (CRUD)    │
+└─────────┬─────────────────────────────────┬──────────────────┘
+          │                                 │
+          ▼                                 ▼
+┌────────────────────┐            ┌────────────────────┐
+│   Python Engine    │            │ Firebase Firestore │
+│   (Llama-3 / RAG)  │            │ (Secure Cloud DB)  │
+│   • NLP Analysis   │            │ • Chat History     │
+│   • OCR Processing │            │ • Folder Sync      │
+└────────────────────┘            └────────────────────┘
 ```
 
 ---
@@ -74,11 +73,10 @@ NyayBot is your **Friendly AI Law Helper** — a professional, premium legal aid
 ```
 ai-legal-aid/
 │
-├── src/                        # React frontend source
-├── api/                        # Express proxy handlers
-├── python_engine/              # Vector DB & AI Logic (FastAPI)
-├── public/                     # Static assets & PWA manifest
-├── vite.config.js              # Vite configuration
+├── src/                        # React frontend (UI, Hooks, Context)
+├── api/                        # Vercel Serverless Functions (Node.js)
+├── python_engine/              # Fast API Backend for Local LLM & OCR
+├── public/                     # Static assets
 └── README.md
 ```
 
@@ -88,86 +86,46 @@ ai-legal-aid/
 
 ### Prerequisites
 
-- **Node.js** v18+ — [Download here](https://nodejs.org)
-- **Anthropic API Key** — [Get one here](https://console.anthropic.com) (starts with `sk-ant-...`)
+- **Node.js** v18+ 
+- **Python** 3.10+ (for the local AI engine)
+- **Firebase Project** (for cloud sync)
 
-### 1. Clone the Repository
+### 1. Clone & Setup
 
 ```bash
 git clone https://github.com/your-username/ai-legal-aid.git
 cd ai-legal-aid
-```
-
-### 2. Start the Backend
-
-```bash
-cd backend
-
-# Install dependencies
 npm install
-
-# Create your environment file
-cp .env.example .env
 ```
 
-Open `.env` and add your API key:
+### 2. Environment Variables
+
+Create a `.env` file based on `.env.example`:
 
 ```env
-ANTHROPIC_API_KEY=sk-ant-your-actual-key-here
-PORT=3001
+VITE_GOOGLE_CLIENT_ID=your_google_client_id
+PYTHON_ENGINE_URL=http://localhost:5000/v1/chat/completions
+FIREBASE_PROJECT_ID=your_project_id
+FIREBASE_CLIENT_EMAIL=your_client_email
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n..."
 ```
 
-Start the server:
+### 3. Run Development Servers
 
-```bash
-npm run dev
-```
-
-> ✅ You should see: `NyayBot backend running on http://localhost:3001`
-
-### 3. Start the Frontend
-
-Open a **new terminal**:
-
-```bash
-cd frontend
-
-# Install dependencies
-npm install
-
-# Start the dev server
-npm run dev
-```
-
-> ✅ You should see Vite running at: `http://localhost:5173`
-
-### 4. Open NyayBot
-
-Navigate to **http://localhost:5173** in your browser. You're ready to go! 🎉
+Refer to the **[HACKATHON_RUNBOOK.md](HACKATHON_RUNBOOK.md)** for detailed instructions on starting the Python Engine and the Vite/Node Dev Servers concurrently.
 
 ---
 
----
+## 🕒 Latest Major Updates (Hackathon Sprint)
 
-## 🕒 Latest Updates (Hackathon Sprint)
-
-| Feature | Description | Status |
+| Update | Description | Status |
 |---|---|---|
-| **Local Inference** | Switched from Claude API to **100% Local Inference**. Llama-3 now runs locally on the edge via `llama-cpp-python`. No API costs, total privacy. | ✅ Done |
-| **Google Sign-In** | Migrated from Phone.email OTP to **Google Identity Services (GIS)**. 1-tap login for a smoother onboarding experience. | ✅ Done |
-| **OCR & Vision** | Implemented a Python OCR bridge to extract text from legal documents (PDFs/Images) uploaded by users. | ✅ Done |
-| **Premium Mobile UI** | Full glassmorphism redesign with a responsive side-drawer, sticky tool-headers, and smooth thread animations. | ✅ Done |
-| **Voice Interaction** | Added voice-to-text input supporting regional accents and multi-modal interaction. | ✅ Done |
-
----
-
-## 🏗 Updated Architecture
-
-NyayBot now uses a **3-tier Local Architecture** to comply with the "build these yourself" hackathon rules:
-
-1. **The Brain (Python/FastAPI)**: Loads the GGUF model (Llama-3) using hardware acceleration (CUDA/Metal).
-2. **The Bridge (Node.js/Express)**: Manages sessions, system prompts, and acts as a security proxy.
-3. **The UI (React/Vite)**: A premium, mobile-first interface for civilian legal aid.
+| **Cloud Sync & Data Persistence** | Replaced local-only storage with **Firestore cloud sync**. Chats and folders now roam with the user's Google account across devices. | ✅ Done |
+| **Complete Data Erasure** | Implemented high-performance **bulk delete** APIs (`/api/chats`, `/api/folders`) to ensure "Clear History" permanently wipes data from the cloud, fixing sync-respawn bugs. | ✅ Done |
+| **Unified Linguistic Engine** | Synced the "Default AI Language" and "Voice Input Dialect" into a single robust system supporting **10 Indian languages**, seamlessly updating the UI and AI context. | ✅ Done |
+| **Dossier UI Polish** | Refined the Client Dossier Center by removing cluttered background assets (glass layers, icons) for a much cleaner, professional aesthetic. | ✅ Done |
+| **OCR & Vision Bridge** | Implemented a Python OCR bridge to extract text from legal documents (PDFs/Images) uploaded by users directly in the chat bar. | ✅ Done |
+| **Google Identity Services** | 1-tap Google login implementation with secure JWT token verification across all API routes. | ✅ Done |
 
 ---
 

@@ -2,20 +2,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import useTheme from '../../hooks/useTheme';
 import './SettingsModal.css';
 
-export default function SettingsModal({ onClose, onClearHistory, historyCount }) {
+export default function SettingsModal({ onClose, onClearHistory, historyCount, analysisMode, setAnalysisMode, language, setLanguage, user, voice }) {
   const { theme, toggleTheme } = useTheme();
   const [showWarning, setShowWarning] = useState(false);
 
   // Settings State
-  const [language, setLanguage] = useState(() => localStorage.getItem('nyay_language') || 'en');
-  const [voiceDialect, setVoiceDialect] = useState(() => localStorage.getItem('nyay_voice_dialect') || 'en-IN');
-  const [analysisMode, setAnalysisMode] = useState(() => localStorage.getItem('nyay_analysis_mode') || 'basic');
   const [exportCitations, setExportCitations] = useState(() => localStorage.getItem('nyay_export_citations') !== 'false');
   const [cloudSync, setCloudSync] = useState(() => localStorage.getItem('nyay_cloud_sync') !== 'false');
 
   // Save changes to localStorage
   useEffect(() => localStorage.setItem('nyay_language', language), [language]);
-  useEffect(() => localStorage.setItem('nyay_voice_dialect', voiceDialect), [voiceDialect]);
   useEffect(() => localStorage.setItem('nyay_analysis_mode', analysisMode), [analysisMode]);
   useEffect(() => localStorage.setItem('nyay_export_citations', exportCitations), [exportCitations]);
   useEffect(() => localStorage.setItem('nyay_cloud_sync', cloudSync), [cloudSync]);
@@ -79,7 +75,32 @@ export default function SettingsModal({ onClose, onClearHistory, historyCount })
           <button className="settings-close-btn" onClick={onClose}>&times;</button>
         </div>
 
-        <div className="settings-body" style={{ overflowY: 'auto', maxHeight: '70vh' }}>
+        <div className="settings-body">
+          <div className="settings-section">
+            <h3>Account Details</h3>
+            <div className="account-info">
+              {user ? (
+                <div className="user-profile">
+                  <div className="user-avatar-large">
+                    {user.photoURL ? (
+                      <img src={user.photoURL} alt={user.displayName} />
+                    ) : (
+                      <div className="avatar-placeholder">{user.displayName?.charAt(0) || user.email?.charAt(0) || 'U'}</div>
+                    )}
+                  </div>
+                  <div className="user-text-info">
+                    <span className="user-name">{user.displayName || 'Legal User'}</span>
+                    <span className="user-email">{user.email || 'No email provided'}</span>
+                    <span className="account-type">{user.isAnonymous ? 'Anonymous Account' : 'Verified Professional'}</span>
+                  </div>
+                </div>
+              ) : (
+                <div className="no-user-info">
+                  <p>Not signed in. Sign in to sync your data across devices.</p>
+                </div>
+              )}
+            </div>
+          </div>
           <div className="settings-section">
             <h3>Appearance</h3>
             <div className="setting-item">
@@ -93,19 +114,19 @@ export default function SettingsModal({ onClose, onClearHistory, historyCount })
           <div className="settings-section">
             <h3>Personalization</h3>
             <div className="setting-item">
-              <span>Default Language</span>
+              <span>Default AI Language</span>
               <select className="setting-select" value={language} onChange={e => setLanguage(e.target.value)}>
-                <option value="en">English</option>
-                <option value="hi">Hindi (हिंदी)</option>
-                <option value="mr">Marathi (मराठी)</option>
+                {voice?.languages?.map(l => (
+                  <option key={l.code} value={l.code}>{l.label}</option>
+                ))}
               </select>
             </div>
             <div className="setting-item">
               <span>Voice Input Dialect</span>
-              <select className="setting-select" value={voiceDialect} onChange={e => setVoiceDialect(e.target.value)}>
-                <option value="en-IN">Indian English</option>
-                <option value="hi-IN">Hindi</option>
-                <option value="mr-IN">Marathi</option>
+              <select className="setting-select" value={voice?.lang} onChange={e => voice.setLang(e.target.value)}>
+                {voice?.languages?.map(l => (
+                  <option key={l.code} value={l.code}>{l.label} ({l.short})</option>
+                ))}
               </select>
             </div>
           </div>
@@ -115,9 +136,9 @@ export default function SettingsModal({ onClose, onClearHistory, historyCount })
             <div className="setting-item">
               <span>Default Analysis Mode</span>
               <select className="setting-select" value={analysisMode} onChange={e => setAnalysisMode(e.target.value)}>
-                <option value="basic">Basic Advice</option>
-                <option value="detailed">Detailed Analysis</option>
-                <option value="draft">Legal Drafting</option>
+                <option value="basic">⚡ Basic Intelligence</option>
+                <option value="advanced">🔍 Advanced Analysis</option>
+                <option value="deep">💎 Deep Strategy</option>
               </select>
             </div>
             <div className="setting-item">

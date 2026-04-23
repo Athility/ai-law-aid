@@ -81,4 +81,30 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+// === DELETE: Clear all chats for user ===
+router.delete("/", async (req, res) => {
+  try {
+    if (!db) return res.status(503).json({ error: "Firestore is not configured." });
+
+    const userId = req.user.sub;
+    const chatsRef = db.collection("users").doc(userId).collection("chats");
+    const snapshot = await chatsRef.get();
+
+    if (snapshot.empty) {
+      return res.json({ success: true, message: "No chats to delete." });
+    }
+
+    const batch = db.batch();
+    snapshot.docs.forEach((doc) => {
+      batch.delete(doc.ref);
+    });
+    await batch.commit();
+
+    res.json({ success: true, message: "All chats deleted." });
+  } catch (error) {
+    console.error("Error clearing chats:", error);
+    res.status(500).json({ error: "Failed to clear chats" });
+  }
+});
+
 export default router;
