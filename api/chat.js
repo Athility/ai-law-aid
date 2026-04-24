@@ -19,10 +19,11 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Invalid messages format" });
     }
 
-    const PYTHON_ENGINE_URL = process.env.PYTHON_ENGINE_URL || "http://localhost:5000/v1/chat/completions";
+    // Use the active ngrok tunnel URL if Vercel environment variable is not set
+    const PYTHON_ENGINE_URL = process.env.PYTHON_ENGINE_URL || "https://untruth-crevice-doorpost.ngrok-free.dev/v1/chat/completions";
 
     if (PYTHON_ENGINE_URL.includes("localhost") && process.env.VERCEL) {
-      console.warn("PYTHON_ENGINE_URL is pointing to localhost on Vercel. This will fail. Please set PYTHON_ENGINE_URL to your ngrok URL in Vercel environment variables.");
+      console.warn("PYTHON_ENGINE_URL is pointing to localhost on Vercel. This will fail.");
     }
 
     // Call the local Python engine using native fetch to support custom parameters
