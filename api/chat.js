@@ -21,6 +21,10 @@ export default async function handler(req, res) {
 
     const PYTHON_ENGINE_URL = process.env.PYTHON_ENGINE_URL || "http://localhost:5000/v1/chat/completions";
 
+    if (PYTHON_ENGINE_URL.includes("localhost") && process.env.VERCEL) {
+      console.warn("PYTHON_ENGINE_URL is pointing to localhost on Vercel. This will fail. Please set PYTHON_ENGINE_URL to your ngrok URL in Vercel environment variables.");
+    }
+
     // Call the local Python engine using native fetch to support custom parameters
     const pythonResponse = await fetch(PYTHON_ENGINE_URL, {
       method: "POST",
@@ -51,6 +55,10 @@ export default async function handler(req, res) {
     res.json({ reply });
   } catch (error) {
     console.error("Local Inference Proxy error:", error);
-    res.status(500).json({ error: "Failed to get response from local AI engine" });
+    res.status(500).json({ 
+      error: "Failed to get response from AI engine",
+      details: error.message,
+      tip: "If you are on Vercel, ensure PYTHON_ENGINE_URL is set to a public ngrok URL and your local python engine is running."
+    });
   }
 }
